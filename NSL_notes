@@ -1,0 +1,140 @@
+Write-Host
+Get-Variable
+Get-Variable -Name "blahblah"
+Get-Variable -ame "blahblah" -ValueOnly
+
+Get-Variable -Name "blah blah " -ValueOnly | Write-Host
+Get-Variable -Name "blah blah" -ValueOnly | Write-Host -ForegroundColor Red
+
+$Spam = $( Get-Variable -ValueOnly Foo) ------>(where Foo = bar)
+$Spam ------> bar  
+
+comparisons
+$Spam -like "bar" ---> where $Spam = "bar"
+True
+$Spam eq "bar" ---> where $Spam = "bar" 
+True
+-not ($Spam -like "Bar")
+False
+$Spam -notlike "Bar"
+False
+
+Conditionals
+If ($Spam -eq "bar") {Write-Host "it's a bar"}
+
+List
+$Food = @("Spam", "Eggs", "Bacon!")
+$Food ----> 
+Spam
+Eggs
+Bacon!
+
+ForEach ($Yum in $Food) { Write-Host $Yum }
+
+ForEach ($Yum in $Food) {Write-Host "$Yum is yummy"} --->
+Spam is yummy
+Eggs is yummy
+Bacon! is yummy
+
+====================
+
+=====================
+
+
+Get-Process
+Get-Process | Where-Object ProcessName -eq "powershell"
+
+$Proc = $(Get-Process | Where-Object ProcessName -like "power*" )
+
+================
+Functions 
+
+Function Eggs($Param1) {Write-Host -ForegroundColor Red -Object "$param1 and Eggs!"}
+
+can say --->
+
+Eggs("Potato") or Eggs "Potato" ----> "Potato and Eggs"
+
+Get-Process | Select-Object ProcessName | Eggs --> and Eggs
+
+Get-Command --> shows list of active functions
+
+Get-Command | Where-Object Name -like "*Eggs*"
+
+Get-Command | Where-Object Name -like "*Get*"
+
+$Food -contains "Eggs" ---> or ---> "Eggs" in $Food ----> (True)
+
+=================
+
+****Never use Aliases or Shortcuts
+
+=================
+
+Get-Process | Foreach-Object {Select-Object $_.ProcessName}
+vs 
+Get-Process | Foreach-Object {Select-Object ProcessName} ---> won't print anything 
+ie you didn't reference ProcessName directly
+
+Get-Process | ForEach-Object {Write-Host $_.ProcessName}
+Get-Process | ForEach {Write-Host $_.ProcessName} ---> uses more memory
+
+Get-Alias ForEach   
+
+powershell.exe -executionpolicy bypass (disables security on Powershell)
+
+Windows Management Instrumentation
+Get-WmiObject -Class Win32_Process
+
+Get-Process | Where-Object ProcessName -like "notepad++"
+Get-Process | Where-Object ProcessName -like "notepad++" | Stop Process --> closes Notepad
+Start-Process notepad.exe --> Notepad
+
+$ApplicationEventLog = EventLog = New-Object -TypeName System.Diagnostics.EventLog -ArgumentList ApplicationEventLog
+
+====== --->  Try this! :)
+Add-Type -AssemblyName System.Speech
+$Speech = New-Object System.Speech.Synthesis.SpeechSynthesizer
+$Speech.Speak("howdy doodeee")
+
+=========
+---> open notepad in Powershell 
+$WSShell = New-Object -ComObject WScript.Shell
+$WSShell .Exec("notepad.exe")
+
+=====
+Get-Item C:\
+
+Get-ChildItem C:\ --> 
+
+==============
+Write to file
+
+Set-Content -Path "foo.txt" -value "Hello Krystal"
+Get-Content .\foo.txt
+
+======
+Write to csv file (ie processes)
+
+Get-Process | Where-Object ProcessName -eq powershell | Export-Csv proc.csv (where proc.csv is name of file)
+
+Get-Process | Where-Object ProcessName -eq svchost | Export-Clixml proc.xml
+
+===================
+-WindowsStyle hidden
+$I = New-Object -ComObject 'InternetExplorer.Application'
+$I.Navigate('https://google.com')
+$I.Fullscren=$True
+$I.Visible=$True
+
+
+
+
+
+
+
+
+
+
+
+
